@@ -1,0 +1,15 @@
+<app-navbar *ngIf="exibindoNavbar()"></app-navbar>
+<router-outlet></router-outlet>
+
+<p-growl></p-growl>
+
+<p-confirmDialog header="Confirmação" icon="fa fa-question-circle" #confirmacao>
+  <p-footer>
+    <button type="button" icon="fa fa-check" label="Sim"
+      (click)="confirmacao.accept()" pButton></button>
+    <button type="button" icon="fa fa-times" label="Não"
+      (click)="confirmacao.reject()" pButton></button>
+  </p-footer>
+</p-confirmDialog>
+
+

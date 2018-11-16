@@ -1,0 +1,104 @@
+<div class="containter">
+  <div class="ui-g">
+    <form #pessoaForm="ngForm" (ngSubmit)="salvar(pessoaForm)" autocomplete="off">
+      <div class="ui-g-12">
+          <h1>{{ editando ? 'Edição de' : 'Nova' }} Pessoa</h1>
+      </div>
+
+      <div class="ui-g-12 ui-fluid">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" #nome="ngModel"
+          [(ngModel)] = "pessoa.nome"
+          required minlength="5" pInputText>
+
+        <app-message [control]="nome" error="required"
+          text="Informe o nome."></app-message>
+        <app-message [control]="nome" error="minlength"
+          text="Mínimo de {{ nome.errors?.minlength?.requiredLength }} caracteres. Você digitou apenas {{ nome.errors?.minlength?.actualLength }} caracter(es)."></app-message>
+      </div>
+
+      <div class="ui-g-12 ui-md-9 ui-fluid">
+        <label for="logradouro">Lougradouro</label>
+        <input type="text" id="logradouro" name="logradouro"
+          [(ngModel)]="pessoa.endereco.logradouro"
+          #logradouro="ngModel" required pInputText>
+
+        <app-message [control]="logradouro" error="required"
+          text="Informe o logradouro."></app-message>
+      </div>
+
+      <div class="ui-g-12 ui-md-3 ui-fluid">
+        <label for="numero">Número</label>
+        <input type="text" id="numero" name="numero"
+          [(ngModel)] = "pessoa.endereco.numero"
+          #numero="ngModel" required pInputText>
+
+        <app-message [control]="numero" error="required"
+          text="Informe o número."></app-message>
+      </div>
+
+      <div class="ui-g-12 ui-md-4 ui-fluid">
+        <label for="complemento">Complemento</label>
+        <input type="text" id="complemento" name="complemento"
+          [(ngModel)] = "pessoa.endereco.complemento" pInputText>
+      </div>
+
+      <div class="ui-g-12 ui-md-4 ui-fluid">
+        <label for="bairro">Bairro</label>
+        <input type="text" id="bairro" name="bairro"
+          [(ngModel)] = "pessoa.endereco.bairro"
+          #bairro="ngModel" required pInputText>
+
+        <app-message [control]="bairro" error="required"
+          text="Informe o bairro."></app-message>
+      </div>
+
+      <div class="ui-g-12 ui-md-4 ui-fluid">
+        <label for="cep">CEP</label>
+        <p-inputMask mask="99.999-999" id="cep" name="cep"
+          [(ngModel)] = "pessoa.endereco.cep"
+          #cep="ngModel" required></p-inputMask>
+
+        <app-message [control]="cep" error="required"
+          text="Informe o CEP."></app-message>
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-fluid">
+        <label for="estado">Estado</label>
+        <p-dropdown placeholder="Selecione..." [autoWidth]="false"
+          [filter]="true" [options]="estados"
+          [(ngModel)]="estadoSelecionado" name="estadoSelecionado"
+          (onChange)="carregarCidades()"
+          #estado="ngModel"  required></p-dropdown>
+          <app-message [control]="estado" error="required"
+            text="Informe o estado."></app-message>
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-fluid">
+        <label for="cidade">Cidade</label>
+        <p-dropdown placeholder="Selecione..." [autoWidth]="false"
+          [filter]="true" [options]="cidades"
+          [(ngModel)]="pessoa.endereco.cidade.codigo" name="cidade"
+          #cidade="ngModel" required
+          [disabled]="!estadoSelecionado"></p-dropdown>
+
+        <app-message [control]="cidade" error="required"
+          text="Informe a cidade."></app-message>
+      </div>
+
+      <div class="ui-g-12">
+        <p-panel header="Contatos">
+          <app-pessoa-cadastro-contato [contatos]="pessoa.contatos"></app-pessoa-cadastro-contato>
+        </p-panel>
+      </div>
+
+      <div class="ui-g-12">
+        <button type="submit" label="Salvar" pButton
+          [disabled]="!pessoaForm.valid"></button>
+        <button type="submit" label="Novo" pButton class="ui-button-info"></button>
+        <a routerLink="/pessoas">Voltar para pesquisa</a>
+      </div>
+
+    </form>
+  </div>
+</div>

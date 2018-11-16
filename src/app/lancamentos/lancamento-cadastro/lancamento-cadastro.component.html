@@ -1,0 +1,114 @@
+<div class="container">
+  <form autocomplete="off" (ngSubmit)="salvar()" [formGroup]="formulario">
+    <div class="ui-g">
+      <div class="ui-g-12">
+        <h1> {{ editando ? 'Edição de' : 'Novo' }} Lançamento</h1>
+      </div>
+
+      <div class="ui-g-12">
+        <p-selectButton id="tipo" name="tipo" [options]="tipos"
+           formControlName="tipo"></p-selectButton>
+      </div>
+
+      <div class="ui-g-6 ui-md-3 ui-fluid">
+        <label for="vencimento">Vencimento</label>
+        <p-calendar dateFormat="dd/mm/yy"  id="vencimento" name="vencimento"
+          [inline] = "false" [readonlyInput] = "false" [showIcon]="false"
+          formControlName="dataVencimento"></p-calendar>
+
+        <app-message [control]="formulario.get('dataVencimento')" error="required"
+          text="Informe uma data de vencimento."></app-message>
+      </div>
+
+      <div class="ui-g-6 ui-md-3 ui-fluid">
+          <label for="recebimento">{{ formulario.get('tipo').value === 'RECEITA' ? 'Recebimento': 'Pagamento' }}</label>
+          <p-calendar dateFormat="dd/mm/yy" id="pagamento" name="pagamento"
+            formControlName="dataPagamento"
+            [inline] = "false" [readonlyInput] = "false" [showIcon]="false"></p-calendar>
+      </div>
+
+      <div class="ui-g-12 ui-md-9 ui-fluid">
+        <!--
+          <label for="descricao">Descrição {{descricao.errors | json}}</label>
+        -->
+        <label for="descricao">Descrição </label>
+        <input type="text" id="descricao" name="descricao" pInputText
+          formControlName="descricao">
+
+        <app-message [control]="formulario.get('descricao')" error="obrigatoriedade"
+          text="Informe uma descrição."></app-message>
+<!--
+        <app-message [control]="formulario.get('descricao')" error="tamanhoMinimo"
+          text="Mínimo de {{ formulario.get('descricao').errors?.tamanhoMinimo?.tamanho }} caracteres. Você digitou apenas {{ descricao.errors?.minlength?.actualLength }} caracter(es)."></app-message>
+-->
+        </div>
+
+      <div class="ui-g-12 ui-md-3 ui-fluid">
+          <label for="valor">Valor</label>
+          <input type="text" id="valor" pInputText placeholder="0,00" name="valor"
+            currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: false}"
+            formControlName="valor">
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-fluid" formGroupName="categoria">
+          <!--
+          <label for="categoria">Categoria {{ categoria.value}}</label>
+          -->
+          <label for="categoria">Categoria</label>
+          <p-dropdown [options]="categorias" id="categoria" name="categoria" placeholder="Selecione"
+            [autoWidth]="false"
+            formControlName="codigo"></p-dropdown>
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-fluid" formGroupName="pessoa">
+          <label for="pessoa">Pessoa</label>
+          <p-dropdown [options]="pessoas" id="pessoa" name="pessoa" placeholder="Selecione"
+            [autoWidth]="false" [filter]="true"
+            formControlName="codigo"></p-dropdown>
+      </div>
+
+      <div class="ui-g-12 ui-fluid">
+          <label for="observacao">Observacao</label>
+          <textarea id="observacao" name="observacao" rows="3"
+            pInputTextarea
+            formControlName="observacao"></textarea>
+      </div>
+
+      <div class="ui-g-6 ui-g-offset-6 ui-md-2 ui-md-offset-10 ui-fluid"
+        *ngIf="!formulario.get('anexo').value">
+        <p-fileUpload name="anexo" mode="basic" auto="true" maxFileSize="100000000"
+          chooseLabel="Anexar" accept="image/*, application/*"
+          [url]="urlUploadAnexo"
+          (onBeforeSend)="antesUploadAnexo($event)"
+          (onUpload)="aoTerminarUploadAnexo($event)"
+          (onError)="erroUpload($event)"
+          [hidden]="uploadEmAndamento">
+        </p-fileUpload>
+        <p-progressSpinner [style]="{ width: '25px', height: '25px' }"
+        [hidden]="!uploadEmAndamento">
+
+        </p-progressSpinner>
+      </div>
+
+      <div class="ui-g-12" dir="rtl"
+        *ngIf="formulario.get('anexo').value">
+        <button pButton type="button" class="ui-button-danger"
+          icon="fa fa-close" pTooltip="Remover anexo" tooltipPosition="top"
+          (click)="removerAnexo()"></button>
+
+        <a target="_blank" pTooltip="Baixar anexo" tooltipPosition="top"
+          [href]="formulario.get('urlAnexo').value">{{ nomeAnexo }}</a>
+      </div>
+
+      <div class="ui-g-12">
+        <button type="submit" label="Salvar" [disabled]="!formulario.valid || uploadEmAndamento" pButton></button>
+        <button type="button" label="Novo" class="ui-button-info"
+          (click)="novo()" pButton></button>
+        <a routerLink="/lancamentos">Voltar para pesquisa</a>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
