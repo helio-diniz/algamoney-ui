@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
+import { ResponseContentType } from '@angular/http';
 
 import * as moment from 'moment';
 
@@ -19,8 +20,8 @@ export class RelatoriosService {
 
   relatorioLancamentosPorPessoa(inicio: Date, fim: Date) {
     const params = new HttpParams()
-      .append('dataInicio', moment(inicio).format('YYYY-MM-DD'))
-      .append('dataFim', moment(fim).format('YYYY-MM-DD'));
+      .append('inicio', moment(inicio).format('YYYY-MM-DD'))
+      .append('fim', moment(fim).format('YYYY-MM-DD'));
 
     return this.http.get(`${this.lancamentosUrl}/relatorios/por-pessoa`,
       { params, responseType: 'blob'})

@@ -20,8 +20,7 @@ export class RelatorioLancamentosComponent implements OnInit {
     this.relatorioService.relatorioLancamentosPorPessoa(this.periodoInicio, this.periodoFim)
       .then(relatorio => {
         const url = window.URL.createObjectURL(relatorio);
-
-        window.open();
+        window.open(url);
       });
   }
 }
